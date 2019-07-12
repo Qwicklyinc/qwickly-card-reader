@@ -133,7 +133,6 @@ def _set_network_config(net_config):
 		
 		config_text += '}'
 		
-	
 	config_file = open('/etc/wpa_supplicant/wpa_supplicant.conf', 'w')
 	config_file.write(config_text)
 	config_file.close()
@@ -157,4 +156,21 @@ def perform_config():
 		_set_network_config(config_data['network'])
 	
 	os.system("amixer sset 'Master' {}%".format(config_data['volume']))
+	
+	copy_command = 'cp {drive_path}/{filename} /home/pi/qwickly/images/{filename}'
+	
+	if config_data['custom_idle_image']:
+		print(copy_command.format(
+			drive_path=get_flashdrive_path(), 
+			filename=config_data['custom_idle_image']))
+		os.system(copy_command.format(
+			drive_path=get_flashdrive_path(), 
+			filename=config_data['custom_idle_image']
+		))
+	
+	if config_data['custom_active_image']:
+		os.system(copy_command.format(
+			drive_path=get_flashdrive_path(), 
+			filename=config_data['custom_active_image']
+		))
 	

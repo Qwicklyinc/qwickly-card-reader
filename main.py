@@ -73,7 +73,7 @@ iface.set_on_close(on_close)
 config_repeater = Repeater(action=detect_and_apply_config, duration=1)
 config_repeater.start()
 
-checkin_repeater = Repeater(action=check_in, duration=5)
+checkin_repeater = Repeater(action=check_in, duration=config['ping_frequency'])
 checkin_repeater.start()
 
 iface.mainloop()
