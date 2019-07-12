@@ -160,9 +160,6 @@ def perform_config():
 	copy_command = 'cp {drive_path}/{filename} /home/pi/qwickly/images/{filename}'
 	
 	if config_data['custom_idle_image']:
-		print(copy_command.format(
-			drive_path=get_flashdrive_path(), 
-			filename=config_data['custom_idle_image']))
 		os.system(copy_command.format(
 			drive_path=get_flashdrive_path(), 
 			filename=config_data['custom_idle_image']

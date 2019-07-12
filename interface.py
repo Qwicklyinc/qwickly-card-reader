@@ -128,8 +128,8 @@ class Button(threading.Thread):
 
 	Attributes:
 		pressed (threading.Event): this flag is set when a button press
-			is detected. Make sure to reset in order to listen to a new
-			button press
+        is detected. Make sure to reset in order to listen to a new
+        button press
 	"""
 
 	def __init__(self):
@@ -200,8 +200,8 @@ class Interface(tk.Tk):
 
 	Attributes:
 		state (State): The current state of the interface. You can read
-			this attribute but for writing set_unconfigured(), set_idle()
-			and set_active() should be used
+        this attribute but for writing set_unconfigured(), set_idle()
+        and set_active() should be used
 	"""
 
 	def __init__(self, connected=False):
@@ -211,7 +211,7 @@ class Interface(tk.Tk):
 
 		Parameters:
 			connected (bool): initial state of interface is unconfigured
-				if False or idle if True
+            if False or idle if True
 		"""
 		
 		# Start io threads
@@ -297,8 +297,8 @@ class Interface(tk.Tk):
 
 		Parameters:
 			function (function): The function to be ran on entry.
-				Should take a tkinter event as a parameter and not have
-				a return value.
+            Should take a tkinter event as a parameter and not have
+            a return value.
 		"""
 
 		self.bind('<Return>', function)
@@ -311,7 +311,7 @@ class Interface(tk.Tk):
 
 		Parameters:
 			function (function): The function to be ran on exit.
-				Should not take any parameters or return a value.
+            Should not take any parameters or return a value.
 		"""
 
 		self.on_close = function
