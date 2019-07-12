@@ -1,7 +1,8 @@
 # Qwickly Card Reader
 
 Send updates and regularly ping qwickly tools server. Meant to run on a Raspberry pi.
-Thans to Liz for designing the icons!
+
+Thanks to Liz for designing the icons!
 
 ## Usage
 
