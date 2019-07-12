@@ -52,9 +52,13 @@ Exec=sudo /usr/bin/python3 /home/pi/qwickly/main.py
 
 #### 5. Clean up boot sequence output
 Open **/boot/cmdline.txt**
+
 Change `console=tty1` to `console=tty3`
+
 Add the following settings. Make sure they are all on line 1.
-```consoleblank=0 loglevel=3 logo.nologo quiet vt.global_cursor_default=0```
+```
+consoleblank=0 loglevel=3 logo.nologo quiet vt.global_cursor_default=0
+```
 
 Open **/boot/config.txt**
 Add this setting to the bottom of the file
