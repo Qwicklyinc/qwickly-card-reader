@@ -31,7 +31,7 @@ sudo apt-get install mpg321
 #### 3. Install raspiaudio 
 *skip this step if you do not plan on using the raspiaudio sound card*
 ```sh
-sudo wget -O - mic.raspiaudio.com | bash
+sudo wget -O - mic.raspiaudio.com | sudo bash
 ```
 Say yes to the reboot. Once the reboot is complete:
 ```sh
