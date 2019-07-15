@@ -1,1 +1,12 @@
-{"network": [{"ssid": "\"network SSID\"", "psk": "\"password\""}], "id": "1", "ping_frequency": 5, "custom_active_image": "", "announce_session_close": true, "announce_session_open": true, "custom_idle_image": "", "volume": 50}
+{
+	"id": "1",
+	"network": [
+		{"ssid": "\"network SSID\"", "psk": "\"password\""}
+	],
+	"volume": 50,
+	"ping_frequency": 5, 
+	"announce_session_open": true, 
+	"announce_session_close": true, 
+	"custom_active_image": "",
+	"custom_idle_image": ""
+}
