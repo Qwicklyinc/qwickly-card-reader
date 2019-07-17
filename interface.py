@@ -250,7 +250,7 @@ class Interface(tk.Tk):
 			self.images['idle'] = tk.PhotoImage(file='/home/pi/qwickly/images/' + config['custom_idle_image'])
 		
 		if config['custom_active_image']:
-			self.images['active'] = tk.PhotoImage(file='home/pi/qwickly/images/' + config['custom_active_image'])
+			self.images['active'] = tk.PhotoImage(file='/home/pi/qwickly/images/' + config['custom_active_image'])
 		
 		self.img = tk.Label(master=self, image=None, background='white')
 		self.img.pack()
