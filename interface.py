@@ -459,15 +459,17 @@ class Interface(tk.Tk):
 		self._greenled.mode = LED.ON
 	
 	
-	def indicate_no_usb():
+	def indicate_no_usb(self):
 		# Only perform once
 		if self.usb_connected:
 			self.usb_connected = False
 			
-			if self.state = State.UNCONFIGURED:
+			self._greenled.mode = LED.OFF
+			
+			if self.state == State.UNCONFIGURED:
 				self.set_unconfigured()
 			
-			if self.state = State.IDLE:
+			if self.state == State.IDLE:
 				self._redled.mode = LED.ON
 				self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
@@ -477,9 +479,21 @@ class Interface(tk.Tk):
 					self.img.configure(image=self.images['logo'])
 
 				self.update_idletasks()
+				
+				self._redled.mode = LED.ON
 			
-			if self.state = State.ACTIVE:
-				self.set_active()
+			if self.state == State.ACTIVE:
+				if config['announce_session_open']:
+					self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
+
+				if 'active' in self.images:
+					self.img.configure(image=self.images['active'])
+				else:
+					self.img.configure(image=self.images['logo'])
+
+				self.update_idletasks()
+				
+				self._redled.mode = LED.FLASH
 
 
 	def indicate_reboot(self):
