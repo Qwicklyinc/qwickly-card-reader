@@ -221,7 +221,7 @@ class Interface(tk.Tk):
 		self._sound = Sound()
 
 		# don't want to announce usb connection over and over
-		self.usb_announcement_counter = 0
+		self.usb_connected = False
 
 		# Set up tkinter window
 		super().__init__()
@@ -449,14 +449,37 @@ class Interface(tk.Tk):
 
 	def indicate_usb_connect(self):
 		# Only announce usb config onece
-		if self.usb_announcement_counter == 0:
+		if not self.usb_connected:
 			self._sound.queue('/home/pi/qwickly/sounds/phrase2.mp3')
-			self.usb_announcement_counter = 1
+			self.usb_connected = True
 
 		self.img.configure(image=self.images['config'])
 		self.update_idletasks()
 		self._redled.mode = LED.HEARTBEAT
 		self._greenled.mode = LED.ON
+	
+	
+	def indicate_no_usb():
+		# Only perform once
+		if self.usb_connected:
+			self.usb_connected = False
+			
+			if self.state = State.UNCONFIGURED:
+				self.set_unconfigured()
+			
+			if self.state = State.IDLE:
+				self._redled.mode = LED.ON
+				self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
+
+				if 'idle' in self.images:
+					self.img.configure(image=self.images['idle'])
+				else:
+					self.img.configure(image=self.images['logo'])
+
+				self.update_idletasks()
+			
+			if self.state = State.ACTIVE:
+				self.set_active()
 
 
 	def indicate_reboot(self):

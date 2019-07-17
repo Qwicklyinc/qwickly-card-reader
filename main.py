@@ -51,6 +51,9 @@ def detect_and_apply_config():
 			iface.indicate_reboot()
 			time.sleep(5)
 			os.popen('reboot')
+	
+	else:
+		iface.indicate_no_usb()
 
 
 def check_in():
