@@ -11,7 +11,7 @@ def get_flashdrive_path():
 	"""
 	
 	media_list = os.listdir('/media/pi/')
-	media_list.remove('SETTINGS')
+	media_list = list(filter(lambda x: 'SETTINGS' not in x, media_list))
 	
 	if media_list:
 		drive_name = media_list[0]
