@@ -191,10 +191,13 @@ class Interface(tk.Tk):
         """ Set interface state to idle """
 
         if self.state != State.IDLE:
-            self.state = State.IDLE
-
-            if config['announce_session_close']:
+            if config['announce_session_close'] and self.state == State.ACTIVE:
                 self._sound.queue('/home/pi/qwickly/sounds/phrase5.mp3')
+            
+            if self.state == State.UNCONFIGURED:
+                self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
+                
+            self.state = State.IDLE
 
             if 'idle' in self.images:
                 self.img.configure(image=self.images['idle'])
