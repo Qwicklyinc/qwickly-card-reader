@@ -60,11 +60,11 @@ Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 
 |Lead color|Smartcard Reader|Raspberry Pi pin|
 |----------|----------------|----------------|
-|Purple|SDA|8|
-|Orange|SCK|11|
-|Yellow|MOSI|10|
-|White|MISO|9|
+|Orange|SDA|8|
+|Yellow|SCK|11|
+|White|MOSI|10|
+|Green|MISO|9|
 ||IRQ|Not connected|
-|Black|GND|GND|
+|Blue|GND|GND|
 |Gray|RST|25|
 |Red|3.3V|3.3V|
