@@ -8,7 +8,7 @@ class Repeater(threading.Thread):
     Class for performing a function repeatedly on a separate thread
     """
     
-    def __init__(self, action, duration=1):
+    def __init__(self, action, duration=0):
         """
         action - function to be performed
         duration - time in seconds to wait between function calls
@@ -24,5 +24,6 @@ class Repeater(threading.Thread):
             
             self.action()
             
-            time.sleep(self.duration)
+            if self.duration > 0:
+                time.sleep(self.duration)
 

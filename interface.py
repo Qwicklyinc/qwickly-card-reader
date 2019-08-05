@@ -3,7 +3,6 @@
 from enum import Enum
 import os
 import time
-import RPi.GPIO as GPIO
 import threading
 import re
 from queue import Queue
@@ -20,140 +19,6 @@ class State(Enum):
     UNCONFIGURED = 0
     IDLE = 1
     ACTIVE = 2
-
-
-class LED(Enum):
-    OFF = 'none'
-    ON = 'default-on'
-    FLASH = 'timer'
-    HEARTBEAT = 'heartbeat'
-
-
-class GreenLED(threading.Thread):
-    """
-    Class for operating green LED light in seperate thread as to not
-    block other functions
-
-    Attributes:
-        mode (LED): modify this to set output
-    """
-
-    def __init__(self):
-        self._stop = threading.Event()
-        self.mode = LED.OFF
-
-        threading.Thread.__init__(self)
-        self.name = 'GreenLED'
-        self.start()
-
-
-    def run(self):
-        while not self._stop.is_set():
-            trigger = os.popen('cat /sys/class/leds/led0/trigger').read()
-            current_mode = re.search('\[(.*?)\]', trigger).group(1)
-
-            if current_mode != self.mode.value:
-                os.system('echo ' + self.mode.value + '>/sys/class/leds/led0/trigger')
-
-
-    def stop(self):
-        self._stop.set()
-
-        self.mode = LED.OFF
-        os.system('echo none >/sys/class/leds/led0/trigger')
-
-
-class RedLED(threading.Thread):
-    """
-    Class for operating red LED light in seperate thread as to not
-    block other functions
-
-    Attributes:
-        mode (LED): modify this to set output
-    """
-
-    def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.setup(25, GPIO.OUT)
-        GPIO.output(25, False)
-
-        self._stop = threading.Event()
-        self.mode = LED.OFF
-
-        threading.Thread.__init__(self)
-        self.name = 'RedLED'
-        self.start()
-
-
-    def run(self):
-        while not self._stop.is_set():
-            try:
-                if self.mode == LED.OFF:
-                    GPIO.output(25, False)
-
-                if self.mode == LED.ON:
-                    GPIO.output(25, True)
-
-                if self.mode == LED.FLASH:
-                    GPIO.output(25, True)
-                    time.sleep(.5)
-                    GPIO.output(25, False)
-                    time.sleep(.5)
-
-                if self.mode == LED.HEARTBEAT:
-                    GPIO.output(25, True)
-                    time.sleep(.1)
-                    GPIO.output(25, False)
-                    time.sleep(.1)
-                    GPIO.output(25, True)
-                    time.sleep(.1)
-                    GPIO.output(25, False)
-                    time.sleep(.6)
-
-            except:
-                pass
-
-
-    def stop(self):
-        self._stop.set()
-
-        GPIO.cleanup(25)
-
-
-class Button(threading.Thread):
-    """
-    Class for listening for button input in a seperate therad as to not
-    block other functions
-
-    Attributes:
-        pressed (threading.Event): this flag is set when a button press
-        is detected. Make sure to reset in order to listen to a new
-        button press
-    """
-
-    def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(23, GPIO.IN)
-
-        self._stop = threading.Event()
-        self.pressed = threading.Event()
-
-        threading.Thread.__init__(self)
-        self.name = 'Button'
-        self.start()
-
-
-    def run(self):
-        while not self._stop.is_set():
-            if GPIO.input(23) == False and not self.pressed.is_set():
-                self.pressed.set()
-
-
-    def stop(self):
-        self._stop.set()
-
-        GPIO.cleanup(23)
 
 
 class Sound(threading.Thread):
@@ -215,9 +80,6 @@ class Interface(tk.Tk):
         """
         
         # Start io threads
-        self._redled = RedLED()
-        self._greenled = GreenLED()
-        self._button = Button()
         self._sound = Sound()
 
         # don't want to announce usb connection over and over
@@ -259,7 +121,6 @@ class Interface(tk.Tk):
         if connected:
             self.state = State.IDLE
 
-            self._redled.mode = LED.ON
             self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
             if 'idle' in self.images:
@@ -271,7 +132,6 @@ class Interface(tk.Tk):
         else:
             self.state = State.UNCONFIGURED
 
-            self._redled.mode = LED.HEARTBEAT
             self._sound.queue('/home/pi/qwickly/sounds/phrase1.mp3')
 
             self.img.configure(image=self.images['config'])
@@ -326,9 +186,6 @@ class Interface(tk.Tk):
             self.img.configure(image=self.images['config'])
             self.update_idletasks()
 
-        if self._redled.mode != LED.HEARTBEAT:
-            self._redled.mode = LED.HEARTBEAT
-
 
     def set_idle(self):
         """ Set interface state to idle """
@@ -345,12 +202,6 @@ class Interface(tk.Tk):
                 self.img.configure(image=self.images['logo'])
 
             self.update_idletasks()
-
-        if self._redled.mode != LED.ON:
-            self._redled.mode = LED.ON
-
-        if self._greenled.mode != LED.OFF:
-            self._greenled.mode = LED.OFF
 
 
     def set_active(self):
@@ -369,12 +220,6 @@ class Interface(tk.Tk):
 
             self.update_idletasks()
 
-        if self._redled.mode != LED.FLASH:
-            self._redled.mode = LED.FLASH
-
-        if self._greenled.mode != LED.OFF:
-            self._greenled.mode = LED.OFF
-
 
     def indicate_pending(self):
         """
@@ -384,14 +229,11 @@ class Interface(tk.Tk):
 
         self.img.configure(image=self.images['pending'])
         self.update_idletasks()
-        self._greenled.mode = LED.ON
 
 
     def indicate_success(self):
         self.img.configure(image=self.images['success'])
         self.update_idletasks()
-
-        self._greenled.mode = LED.OFF
 
         self._sound.queue('/home/pi/qwickly/sounds/sound1.mp3')
 
@@ -411,18 +253,10 @@ class Interface(tk.Tk):
 
         self._sound.queue('/home/pi/qwickly/sounds/phrase6.mp3')
 
-        self._greenled.mode = LED.OFF
-
-        # Flash rapidly for 3 seconds
-        for i in range(15):
-            self._redled.mode = LED.ON
-            time.sleep(.1)
-            self._redled.mode = LED.OFF
-            time.sleep(.1)
+        time.sleep(1)
 
         # Resume previous state
         if self.state == State.IDLE:
-            self._redled.mode = LED.ON
 
             if 'idle' in self.images:
                 self.img.configure(image=self.images['idle'])
@@ -432,7 +266,6 @@ class Interface(tk.Tk):
             self.update_idletasks()
 
         if self.state == State.ACTIVE:
-            self._redled.mode = LED.FLASH
 
             if 'active' in self.images:
                 self.img.configure(image=self.images['active'])
@@ -442,7 +275,6 @@ class Interface(tk.Tk):
             self.update_idletasks()
 
         if self.state == State.UNCONFIGURED:
-            self._redled.mode = LED.HEARTBEAT
             self.img.configure(image=self.images['config'])
             self.update_idletasks()
 
@@ -455,8 +287,6 @@ class Interface(tk.Tk):
 
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
-        self._redled.mode = LED.HEARTBEAT
-        self._greenled.mode = LED.ON
     
     
     def indicate_no_usb(self):
@@ -464,13 +294,10 @@ class Interface(tk.Tk):
         if self.usb_connected:
             self.usb_connected = False
             
-            self._greenled.mode = LED.OFF
-            
             if self.state == State.UNCONFIGURED:
                 self.set_unconfigured()
             
             if self.state == State.IDLE:
-                self._redled.mode = LED.ON
                 self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
                 if 'idle' in self.images:
@@ -479,8 +306,6 @@ class Interface(tk.Tk):
                     self.img.configure(image=self.images['logo'])
 
                 self.update_idletasks()
-                
-                self._redled.mode = LED.ON
             
             if self.state == State.ACTIVE:
                 if config['announce_session_open']:
@@ -492,8 +317,6 @@ class Interface(tk.Tk):
                     self.img.configure(image=self.images['logo'])
 
                 self.update_idletasks()
-                
-                self._redled.mode = LED.FLASH
 
 
     def indicate_reboot(self):
@@ -501,9 +324,6 @@ class Interface(tk.Tk):
         self.update_idletasks()
 
         self._sound.queue('/home/pi/qwickly/sounds/phrase3.mp3')
-
-        self._redled.mode = LED.OFF
-        self._greenled.mode = LED.HEARTBEAT
 
 
     def escape(self, event):
@@ -516,9 +336,6 @@ class Interface(tk.Tk):
             self.on_close()
 
         # Stop all io threads
-        self._redled.stop()
-        self._greenled.stop()
-        self._button.stop()
         self._sound.stop()
 
         # Close Window
