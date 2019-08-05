@@ -64,7 +64,7 @@ Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 |Orange|SCK|11|
 |Yellow|MOSI|10|
 |White|MISO|9|
-|Green|IRQ|Not connected|
+||IRQ|Not connected|
 |Black|GND|GND|
 |Gray|RST|25|
 |Red|3.3V|3.3V|
