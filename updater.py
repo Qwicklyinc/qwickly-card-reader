@@ -6,6 +6,16 @@ from pkg_resources import parse_version
 
 
 def _local_tags(parse=False):
+    """
+    Get version tags that are available on current machine
+    
+    Parameters:
+    parse (bool): False to get tag strings, True to get pgk_resources.Version objects
+    
+    Returns:
+    list: a list of tags
+    """
+    
     pipe = os.popen('git tag')
     local_str = pipe.read()
     pipe.close()
@@ -16,6 +26,16 @@ def _local_tags(parse=False):
 
 
 def _remote_tags(parse=False):
+    """
+    Get version tags that are available in remote repository
+    
+    Parameters:
+    parse (bool): False to get tag strings, True to get pgk_resources.Version objects
+    
+    Returns:
+    list: a list of tags
+    """
+    
     pipe = os.popen('git ls-remote --tags')
     remote_str = pipe.read()
     pipe.close()
@@ -26,6 +46,7 @@ def _remote_tags(parse=False):
 
 
 def _store_temp():
+    """ Store CONFIG.json and custom images in a temporary directory """
     os.mkdir('temp')
 
     shutil.copytree(
@@ -41,6 +62,8 @@ def _store_temp():
     
 
 def _recover_temp():
+    """ Return temporary directory contents to their original location """
+    
     shutil.move('temp/CONFIG.json', 'CONFIG.json')
 
     for item in os.listdir('temp/images'):
@@ -52,6 +75,13 @@ def _recover_temp():
 
 
 def current_version(parse=False):
+    """ 
+    Get version tag of currently active version
+    
+    Parameters:
+    parse (bool): False to get a tag string, True to get a pkg_resources.Version object
+    """
+    
     os.chdir('/home/pi/qwickly')
     
     pipe = os.popen('git describe --tags')
@@ -62,12 +92,20 @@ def current_version(parse=False):
 
 
 def update_available():
+    """ Check for new version """
     os.chdir('/home/pi/qwickly')
     
     return max(_remote_tags(parse=True)) > current_version(parse=True)
 
 
 def get_version(version):
+    """
+    Check out a different version
+    
+    Parameters:
+    version (str): a version tag string
+    """
+    
     os.chdir('/home/pi/qwickly')
     
     if version == current_version():
@@ -89,6 +127,8 @@ def get_version(version):
 
 
 def update():
+    """ Check out newst version """
+    
     newest_version = max(_remote_tags(parse=True))
     
     get_version('v' + str(newest_version))
