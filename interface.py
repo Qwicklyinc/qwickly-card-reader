@@ -87,7 +87,7 @@ class Interface(tk.Tk):
 
         # Set up tkinter window
         super().__init__()
-        #self.attributes('-fullscreen', True)
+        self.attributes('-fullscreen', True)
         self.configure(background='white')
 
         self.card_code = tk.StringVar()
