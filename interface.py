@@ -87,7 +87,7 @@ class Interface(tk.Tk):
 
         # Set up tkinter window
         super().__init__()
-        self.attributes('-fullscreen', True)
+        #self.attributes('-fullscreen', True)
         self.configure(background='white')
 
         self.card_code = tk.StringVar()
@@ -333,7 +333,7 @@ class Interface(tk.Tk):
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
         
-        self.sound.queue('/home/pi/qwickly/sounds/phrase9.mp3')
+        self._sound.queue('/home/pi/qwickly/sounds/phrase9.mp3')
 
 
     def escape(self, event):

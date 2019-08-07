@@ -47,6 +47,7 @@ def _remote_tags(parse=False):
 
 def _store_temp():
     """ Store CONFIG.json and custom images in a temporary directory """
+    
     os.mkdir('temp')
 
     shutil.copytree(
@@ -93,6 +94,7 @@ def current_version(parse=False):
 
 def update_available():
     """ Check for new version """
+    
     os.chdir('/home/pi/qwickly')
     
     return max(_remote_tags(parse=True)) > current_version(parse=True)
