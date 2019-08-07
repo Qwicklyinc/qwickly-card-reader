@@ -323,10 +323,17 @@ class Interface(tk.Tk):
 
 
     def indicate_reboot(self):
-        self.img.configure(image=self.images['logo'])
+        self.img.configure(image=self.images['config'])
         self.update_idletasks()
 
         self._sound.queue('/home/pi/qwickly/sounds/phrase3.mp3')
+    
+    
+    def indicate_update(self):
+        self.img.configure(image=self.images['config'])
+        self.update_idletasks()
+        
+        self.sound.queue('/home/pi/qwickly/sounds/phrase9.mp3')
 
 
     def escape(self, event):

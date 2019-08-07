@@ -9,6 +9,7 @@ import SimpleMFRC522
 from interface import *
 from usbconfig import *
 from repeater import *
+from updater import *
 
 config = get_current_config()
 
@@ -87,11 +88,19 @@ def check_in():
         iface.set_active()
     else:
         iface.set_idle()
-        
+    
 
 iface = Interface(is_connected())
 iface.set_on_entry(transmit)
 iface.set_on_close(on_close)
+
+if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
+    iface.indicate_update()
+    get_version(config['version'])
+
+if config['version'] == 'latest' and update_available():
+    iface.indicate_update()
+    update()
 
 config_repeater = Repeater(action=detect_and_apply_config, duration=1)
 config_repeater.start()
