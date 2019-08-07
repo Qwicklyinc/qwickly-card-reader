@@ -96,10 +96,12 @@ iface.set_on_close(on_close)
 
 if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
     iface.indicate_update()
+    time.sleep(3)
     get_version(config['version'])
 
 if config['version'] == 'latest' and update_available():
     iface.indicate_update()
+    time.sleep(3)
     update()
 
 config_repeater = Repeater(action=detect_and_apply_config, duration=1)
