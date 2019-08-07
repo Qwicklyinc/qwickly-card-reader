@@ -94,6 +94,18 @@ iface = Interface(is_connected())
 iface.set_on_entry(transmit)
 iface.set_on_close(on_close)
 
+config_repeater = Repeater(action=detect_and_apply_config, duration=1)
+config_repeater.start()
+
+checkin_repeater = Repeater(action=check_in, duration=int(config['ping_frequency']))
+checkin_repeater.start()
+
+rfid_repeater = Repeater(action=read_rfid)
+rfid_repeater.start()
+
+while not is_connected():
+    time.sleep(1)
+
 if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
     iface.indicate_update()
     time.sleep(3)
@@ -103,14 +115,5 @@ if config['version'] == 'latest' and update_available():
     iface.indicate_update()
     time.sleep(3)
     update()
-
-config_repeater = Repeater(action=detect_and_apply_config, duration=1)
-config_repeater.start()
-
-checkin_repeater = Repeater(action=check_in, duration=int(config['ping_frequency']))
-checkin_repeater.start()
-
-rfid_repeater = Repeater(action=read_rfid)
-rfid_repeater.start()
 
 iface.mainloop()
