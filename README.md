@@ -71,3 +71,6 @@ Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 |Blue|GND|GND|
 |Gray|RST|25|
 |Red|3.3V|3.3V|
+
+
+## Releasing a new version
