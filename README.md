@@ -9,6 +9,9 @@ MFRC522.py and SimpleMFRC522.py taken from [clever_card_kit](https://github.com/
 ## Usage
 
 Directory should be downloaded to **/home/pi/qwickly/**
+```sh
+git clone https://github.com/bartPrzybysz/qwickly-card-reader.git /home/pi/qwickly
+```
 
 Ideally this will be automatically started on boot but here's the command to run by hand:
 ```sh
