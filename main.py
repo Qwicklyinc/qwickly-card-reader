@@ -19,6 +19,7 @@ checkin_receiver = "https://test.qwickly.tools/requestinfo/"
 
 session = requests.Session()
 rfid_reader = SimpleMFRC522.SimpleMFRC522()
+checked_for_update = False
 
 
 def is_connected():
@@ -77,6 +78,18 @@ def detect_and_apply_config():
         iface.indicate_no_usb()
 
 
+def check_for_update():
+    if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
+        iface.indicate_update()
+        time.sleep(3)
+        get_version(config['version'])
+
+    if config['version'] == 'latest' and update_available():
+        iface.indicate_update()
+        time.sleep(3)
+        update()
+
+
 def check_in():
     if not is_connected():
         iface.set_unconfigured()
@@ -88,6 +101,10 @@ def check_in():
         iface.set_active()
     else:
         iface.set_idle()
+    
+    if not r['found_open_session'] and not checked_for_update:
+        check_for_update()
+        checked_for_update = True
     
 
 iface = Interface(is_connected())
@@ -102,18 +119,5 @@ checkin_repeater.start()
 
 rfid_repeater = Repeater(action=read_rfid)
 rfid_repeater.start()
-
-while not is_connected():
-    time.sleep(1)
-
-if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
-    iface.indicate_update()
-    time.sleep(3)
-    get_version(config['version'])
-
-if config['version'] == 'latest' and update_available():
-    iface.indicate_update()
-    time.sleep(3)
-    update()
 
 iface.mainloop()
