@@ -32,7 +32,9 @@ def read_rfid():
     
     if card_content:
         print(card_content)
-        payload = {'device_id':id, 'card_swipe_value':card_content}
+        iface.indicate_pending()
+        
+        payload = {'device_id':id, 'card_swipe_value': card_content}
         r = session.post(card_receiver, data=payload).json()
         print(r)
                 
@@ -79,7 +81,10 @@ def detect_and_apply_config():
 
 
 def check_for_update():
-    if config['version'] != 'latest' and current_version() != config['version'] and is_connected():
+    if config['version'] == 'local':
+        return
+    
+    if config['version'] != 'latest' and current_version() != config['version']:
         iface.indicate_update()
         time.sleep(3)
         get_version(config['version'])
@@ -101,6 +106,8 @@ def check_in():
         iface.set_active()
     else:
         iface.set_idle()
+    
+    global checked_for_update
     
     if not r['found_open_session'] and not checked_for_update:
         check_for_update()

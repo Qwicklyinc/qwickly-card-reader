@@ -89,9 +89,10 @@ class Interface(tk.Tk):
         super().__init__()
         self.attributes('-fullscreen', True)
         self.configure(background='white')
+        self.configure(cursor='none')
 
         self.card_code = tk.StringVar()
-        self._card_entry = tk.Entry(self, textvariable=self.card_code, show='*', borderwidth=0, highlightthickness=0)
+        self._card_entry = tk.Entry(self, textvariable=self.card_code, show='', borderwidth=0, highlightthickness=0)
         self._card_entry.pack(fill='x')
         self._card_entry.focus()
 
@@ -103,6 +104,8 @@ class Interface(tk.Tk):
         self.images = {
             'logo': tk.PhotoImage(file='/home/pi/qwickly/images/logo.png'),
             'config': tk.PhotoImage(file='/home/pi/qwickly/images/config.png'),
+            'active': tk.PhotoImage(file='/home/pi/qwickly/images/active.png'),
+            'idle': tk.PhotoImage(file='/home/pi/qwickly/images/idle.png'),
             'pending': tk.PhotoImage(file='/home/pi/qwickly/images/pending.png'),
             'success': tk.PhotoImage(file='/home/pi/qwickly/images/success.png'),
             'fail': tk.PhotoImage(file='/home/pi/qwickly/images/fail.png')
@@ -123,10 +126,7 @@ class Interface(tk.Tk):
 
             self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
-            if 'idle' in self.images:
-                self.img.configure(image=self.images['idle'])
-            else:
-                self.img.configure(image=self.images['logo'])
+            self.img.configure(image=self.images['idle'])
 
             self.update_idletasks()
         else:
@@ -199,10 +199,7 @@ class Interface(tk.Tk):
                 
             self.state = State.IDLE
 
-            if 'idle' in self.images:
-                self.img.configure(image=self.images['idle'])
-            else:
-                self.img.configure(image=self.images['logo'])
+            self.img.configure(image=self.images['idle'])
 
             self.update_idletasks()
 
@@ -216,10 +213,7 @@ class Interface(tk.Tk):
             if config['announce_session_open']:
                 self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
 
-            if 'active' in self.images:
-                self.img.configure(image=self.images['active'])
-            else:
-                self.img.configure(image=self.images['logo'])
+            self.img.configure(image=self.images['active'])
 
             self.update_idletasks()
 
@@ -242,11 +236,8 @@ class Interface(tk.Tk):
 
         time.sleep(1.5)
 
-        if 'active' in self.images:
-            self.img.configure(image=self.images['active'])
-        else:
-            self.img.configure(image=self.images['logo'])
-
+        self.img.configure(image=self.images['active'])
+        
         self.update_idletasks()
 
 
@@ -261,19 +252,13 @@ class Interface(tk.Tk):
         # Resume previous state
         if self.state == State.IDLE:
 
-            if 'idle' in self.images:
-                self.img.configure(image=self.images['idle'])
-            else:
-                self.img.configure(image=self.images['logo'])
+            self.img.configure(image=self.images['idle'])
 
             self.update_idletasks()
 
         if self.state == State.ACTIVE:
 
-            if 'active' in self.images:
-                self.img.configure(image=self.images['active'])
-            else:
-                self.img.configure(image=self.images['logo'])
+            self.img.configure(image=self.images['active'])
 
             self.update_idletasks()
 
@@ -303,10 +288,7 @@ class Interface(tk.Tk):
             if self.state == State.IDLE:
                 self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
-                if 'idle' in self.images:
-                    self.img.configure(image=self.images['idle'])
-                else:
-                    self.img.configure(image=self.images['logo'])
+                self.img.configure(image=self.images['idle'])
 
                 self.update_idletasks()
             
@@ -314,10 +296,7 @@ class Interface(tk.Tk):
                 if config['announce_session_open']:
                     self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
 
-                if 'active' in self.images:
-                    self.img.configure(image=self.images['active'])
-                else:
-                    self.img.configure(image=self.images['logo'])
+                self.img.configure(image=self.images['active'])
 
                 self.update_idletasks()
 
@@ -338,6 +317,7 @@ class Interface(tk.Tk):
 
     def escape(self, event):
         self.attributes('-fullscreen', False)
+        self.configure(cursor='')
 
 
     def close(self):
