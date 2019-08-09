@@ -4,10 +4,10 @@ from enum import Enum
 import os
 import time
 import threading
-import re
 from queue import Queue
 import tkinter as tk
 import json
+from squid import *
 
 
 config_file = open('/home/pi/qwickly/CONFIG.json')
@@ -120,20 +120,23 @@ class Interface(tk.Tk):
         self.img = tk.Label(master=self, image=None, background='white')
         self.img.pack()
         
+        self.led = Squid(4, 27, 22)
+        
         # initial state can be unconfigured or idle
         if connected:
             self.state = State.IDLE
+            
+            self.led.set_color(OFF)
 
             self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
-
             self.img.configure(image=self.images['idle'])
-
             self.update_idletasks()
         else:
             self.state = State.UNCONFIGURED
+            
+            self.led.set_color([95, 5, 0])
 
             self._sound.queue('/home/pi/qwickly/sounds/phrase1.mp3')
-
             self.img.configure(image=self.images['config'])
             self.update_idletasks()
 
@@ -184,6 +187,7 @@ class Interface(tk.Tk):
             self.state = State.UNCONFIGURED
             self._sound.queue('/home/pi/qwickly/sounds/phrase7.mp3')
             self.img.configure(image=self.images['config'])
+            self.led.set_color([95, 5, 0])
             self.update_idletasks()
 
 
@@ -200,6 +204,8 @@ class Interface(tk.Tk):
             self.state = State.IDLE
 
             self.img.configure(image=self.images['idle'])
+            
+            self.led.set_color(OFF)
 
             self.update_idletasks()
 
@@ -214,6 +220,8 @@ class Interface(tk.Tk):
                 self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
 
             self.img.configure(image=self.images['active'])
+            
+            self.led.set_color(WHITE)
 
             self.update_idletasks()
 
@@ -226,6 +234,8 @@ class Interface(tk.Tk):
 
         self.img.configure(image=self.images['pending'])
         self.update_idletasks()
+        
+        self.led.set_color(BLUE)
 
 
     def indicate_success(self):
@@ -233,8 +243,12 @@ class Interface(tk.Tk):
         self.update_idletasks()
 
         self._sound.queue('/home/pi/qwickly/sounds/sound1.mp3')
+        
+        self.led.set_color(GREEN)
 
         time.sleep(1.5)
+        
+        self.led.set_color(WHITE)
 
         self.img.configure(image=self.images['active'])
         
@@ -246,35 +260,43 @@ class Interface(tk.Tk):
         self.update_idletasks()
 
         self._sound.queue('/home/pi/qwickly/sounds/phrase6.mp3')
+        
+        self.led.set_color(RED)
 
-        time.sleep(1)
+        time.sleep(2)
 
         # Resume previous state
         if self.state == State.IDLE:
 
             self.img.configure(image=self.images['idle'])
-
             self.update_idletasks()
+            
+            self.led.set_color(OFF)
 
         if self.state == State.ACTIVE:
 
             self.img.configure(image=self.images['active'])
-
             self.update_idletasks()
+            
+            self.led.set_color(WHITE)
 
         if self.state == State.UNCONFIGURED:
             self.img.configure(image=self.images['config'])
             self.update_idletasks()
+            
+            self.led.set_color([95, 5, 0])
 
 
     def indicate_usb_connect(self):
-        # Only announce usb config onece
+        # Only announce usb config once
         if not self.usb_connected:
             self._sound.queue('/home/pi/qwickly/sounds/phrase2.mp3')
             self.usb_connected = True
 
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
+        
+        self.led.set_color([95, 5, 0])
     
     
     def indicate_no_usb(self):
@@ -289,21 +311,25 @@ class Interface(tk.Tk):
                 self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
 
                 self.img.configure(image=self.images['idle'])
-
                 self.update_idletasks()
+                
+                self.led.set_color(OFF)
             
             if self.state == State.ACTIVE:
                 if config['announce_session_open']:
                     self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
 
                 self.img.configure(image=self.images['active'])
-
                 self.update_idletasks()
+                
+                self.led.set_color(WHITE)
 
 
     def indicate_reboot(self):
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
+        
+        self.led.set_color([95, 5, 0])
 
         self._sound.queue('/home/pi/qwickly/sounds/phrase3.mp3')
     
@@ -311,6 +337,8 @@ class Interface(tk.Tk):
     def indicate_update(self):
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
+        
+        self.led.set_color([95, 5, 0])
         
         self._sound.queue('/home/pi/qwickly/sounds/phrase9.mp3')
 
@@ -324,6 +352,8 @@ class Interface(tk.Tk):
         # Execute provided on_close function
         if self.on_close != None:
             self.on_close()
+            
+        self.led.set_color(OFF)
 
         # Stop all io threads
         self._sound.stop()
