@@ -126,7 +126,7 @@ class Interface(tk.Tk):
         if connected:
             self.state = State.IDLE
             
-            self.led.set_color(OFF)
+            self.led.set_color(PURPLE)
 
             self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
             self.img.configure(image=self.images['idle'])
@@ -205,7 +205,7 @@ class Interface(tk.Tk):
 
             self.img.configure(image=self.images['idle'])
             
-            self.led.set_color(OFF)
+            self.led.set_color(PURPLE)
 
             self.update_idletasks()
 
@@ -271,7 +271,7 @@ class Interface(tk.Tk):
             self.img.configure(image=self.images['idle'])
             self.update_idletasks()
             
-            self.led.set_color(OFF)
+            self.led.set_color(PURPLE)
 
         if self.state == State.ACTIVE:
 
@@ -313,7 +313,7 @@ class Interface(tk.Tk):
                 self.img.configure(image=self.images['idle'])
                 self.update_idletasks()
                 
-                self.led.set_color(OFF)
+                self.led.set_color(PURPLE)
             
             if self.state == State.ACTIVE:
                 if config['announce_session_open']:
