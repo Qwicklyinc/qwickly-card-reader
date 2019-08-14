@@ -202,11 +202,8 @@ class Interface(tk.Tk):
                 self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
                 
             self.state = State.IDLE
-
             self.img.configure(image=self.images['idle'])
-            
             self.led.set_color(PURPLE)
-
             self.update_idletasks()
 
 
@@ -220,9 +217,7 @@ class Interface(tk.Tk):
                 self._sound.queue('/home/pi/qwickly/sounds/phrase4.mp3')
 
             self.img.configure(image=self.images['active'])
-            
             self.led.set_color(WHITE)
-
             self.update_idletasks()
 
 
@@ -234,56 +229,44 @@ class Interface(tk.Tk):
 
         self.img.configure(image=self.images['pending'])
         self.update_idletasks()
-        
         self.led.set_color(BLUE)
 
 
     def indicate_success(self):
         self.img.configure(image=self.images['success'])
         self.update_idletasks()
-
         self._sound.queue('/home/pi/qwickly/sounds/sound1.mp3')
-        
         self.led.set_color(GREEN)
 
         time.sleep(1.5)
         
         self.led.set_color(WHITE)
-
         self.img.configure(image=self.images['active'])
-        
         self.update_idletasks()
 
 
     def indicate_failure(self):
         self.img.configure(image=self.images['fail'])
         self.update_idletasks()
-
         self._sound.queue('/home/pi/qwickly/sounds/phrase6.mp3')
-        
         self.led.set_color(RED)
 
         time.sleep(2)
 
         # Resume previous state
         if self.state == State.IDLE:
-
             self.img.configure(image=self.images['idle'])
             self.update_idletasks()
-            
             self.led.set_color(PURPLE)
 
         if self.state == State.ACTIVE:
-
             self.img.configure(image=self.images['active'])
             self.update_idletasks()
-            
             self.led.set_color(WHITE)
 
         if self.state == State.UNCONFIGURED:
             self.img.configure(image=self.images['config'])
             self.update_idletasks()
-            
             self.led.set_color([95, 5, 0])
 
 
@@ -295,7 +278,6 @@ class Interface(tk.Tk):
 
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
-        
         self.led.set_color([95, 5, 0])
     
     
@@ -309,10 +291,8 @@ class Interface(tk.Tk):
             
             if self.state == State.IDLE:
                 self._sound.queue('/home/pi/qwickly/sounds/phrase8.mp3')
-
                 self.img.configure(image=self.images['idle'])
                 self.update_idletasks()
-                
                 self.led.set_color(PURPLE)
             
             if self.state == State.ACTIVE:
@@ -321,25 +301,20 @@ class Interface(tk.Tk):
 
                 self.img.configure(image=self.images['active'])
                 self.update_idletasks()
-                
                 self.led.set_color(WHITE)
 
 
     def indicate_reboot(self):
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
-        
         self.led.set_color([95, 5, 0])
-
         self._sound.queue('/home/pi/qwickly/sounds/phrase3.mp3')
     
     
     def indicate_update(self):
         self.img.configure(image=self.images['config'])
         self.update_idletasks()
-        
         self.led.set_color([95, 5, 0])
-        
         self._sound.queue('/home/pi/qwickly/sounds/phrase9.mp3')
 
 

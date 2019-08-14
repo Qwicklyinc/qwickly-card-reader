@@ -8,5 +8,6 @@
 	"announce_session_open": true, 
 	"announce_session_close": true, 
 	"custom_active_image": "",
-	"custom_idle_image": ""
+	"custom_idle_image": "",
+	"version": "latest"
 }
