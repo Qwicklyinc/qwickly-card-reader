@@ -59,7 +59,16 @@ disable_splash=1
 Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 
 
-#### 5. If using RFID reader, connect the GPIO pins
+#### 5. Connect the RFID reader
+*Skip this step if not useing the RFID reader*
+
+Go to **Preferences -> Raspberry pi Configuration**
+
+In the **Interfaces** tab, enable **SPI**
+
+Disconnect the power
+
+Connect the GPIO pins:
 
 |Lead color|Smartcard Reader|Raspberry Pi pin|
 |----------|----------------|----------------|
@@ -71,3 +80,54 @@ Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 |Blue|GND|GND|
 |Gray|RST|25|
 |Red|3.3V|3.3V|
+
+#### 6. Connect the Squid LED
+
+*Skip this step if not using the Squid LED*
+
+|Lead color|Raspberry Pi pin|
+|----------|----------------|
+|Red|4|
+|Black|GND|
+|Green|17|
+|Blue|27|
+
+#### 7. Install the [RASPIAUDIO sound card](https://www.raspiaudio.com/raspiaudio-aiy)
+
+*Skip this step if not using the sound card*
+
+```sh
+sudo wget -O - mic.raspiaudio.com | sudo bash
+```
+
+Say yes to the reboot. Once the reboot is complete:
+
+```sh
+sudo wget -O - test.raspiaudio.com | sudo bash
+```
+
+Go to **Preferences -> Audio Devices Setting** then click on "Select Control" and check "Master" and "Mic".
+
+## Remotely pushing updates
+
+Tag the the commit you want to publish with an incremented version number.
+
+*WARNING: Never tag the same commit twice, the updater will get confused*
+
+Version number examples:
+- v0.2
+- v0.125
+- v1.1
+- v1.3.21
+- v2.3.4.5
+
+This can be done on a raspberry pi:
+```sh
+cd /home/pi/qwickly
+git tag v1.2
+git push origin v1.2
+```
+
+Or using the releases page on github.
+
+Next time a Raspberry pi reboots, it will checkout the new version.
