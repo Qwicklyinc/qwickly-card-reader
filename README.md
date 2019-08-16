@@ -108,7 +108,7 @@ sudo wget -O - test.raspiaudio.com | sudo bash
 
 Go to **Preferences -> Audio Devices Setting** then click on "Select Control" and check "Master" and "Mic".
 
-## Remotely pushing updates
+## Remotely publishing updates
 
 Tag the the commit you want to publish with an incremented version number.
 
@@ -170,6 +170,6 @@ Example configuration file:
 - **network** - list of network details to be added to [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md). Note that previous network configurations will be removed.
 - **ping-frequency** - Amount of time (in seconds) to wait between server updates
 - **volume** - Volume ot be set with [amixer](https://www.geeksforgeeks.org/amixer-command-in-linux-with-examples/)
-- **announce_session_open** / **announce_session_close** - Wether or not a sound notification should be used on course status change
+- **announce_session_open** / **announce_session_close** - Whether or not a sound notification should be used on course status change
 - **custom_idle_image** / **custom_active_image** - Name of the custom image with the file extension (.png). The images used should also be placed in the root directory of the configuration device
 - **version** - Specify which version the updater should seek out. You can specify a version tag here "v1.2". Specify "latest" to seek the latest version and "local" to freeze automatic updates. 
