@@ -112,7 +112,7 @@ Go to **Preferences -> Audio Devices Setting** then click on "Select Control" an
 
 Tag the the commit you want to publish with an incremented version number.
 
-*WARNING: Never tag the same commit twice, the updater will get confused*
+*WARNING: Never tag the same commit twice, the updater will get confused and possibly start an infinite boot loop*
 
 Version number examples:
 - v0.2
@@ -131,3 +131,45 @@ git push origin v1.2
 Or using the releases page on github.
 
 Next time a Raspberry pi reboots, it will checkout the new version.
+
+## Configuration file
+
+To configure the card reader, place **CARDSWIPERCONFIG.json** in the root directory of a USB flashdrive and insert it into the Raspberry Pi. If the contents of **CARDSWIPERCONFIG.json** don't precisely match the contents of the local **CONFIG.json** file, its contents will be copied and the device will reboot. No card entries should be handled while the configuration USB is connected.
+
+Example configuration file:
+
+```JSON
+{
+    "network": [
+        {
+            "ssid": "\"MyWiFi\"",
+            "psk": "\"wifiPassword\""
+        },
+        {
+            "ssid": "\"SchoolWiFi\"",
+            "scan_ssid": "1",
+            "key_mgmt": "WPA-EAP",
+            "group": "CCMP TKIP",
+            "eap": "PEAP",
+            "identity": "\"user@university.edu\"",
+            "password": "\"UserPassword\"",
+            "phase1": "\"peapver=0\"",
+            "phase2": "\"MSCHAPV@\""
+        }
+    ],
+    "ping_frequency": 5,
+    "volume": 69,
+    "announce_session_open": true,
+    "announce_session_close": true,
+    "custom_idle_image": "University_logo.png",
+    "custom_active_image": "",
+    "version": "latest"
+}
+```
+
+- **network** - list of network details to be added to [wpa_supplicant.conf](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md). Note that previous network configurations will be removed.
+- **ping-frequency** - Amount of time (in seconds) to wait between server updates
+- **volume** - Volume ot be set with [amixer](https://www.geeksforgeeks.org/amixer-command-in-linux-with-examples/)
+- **announce_session_open** / **announce_session_close** - Wether or not a sound notification should be used on course status change
+- **custom_idle_image** / **custom_active_image** - Name of the custom image with the file extension (.png). The images used should also be placed in the root directory of the configuration device
+- **version** - Specify which version the updater should seek out. You can specify a version tag here "v1.2". Specify "latest" to seek the latest version and "local" to freeze automatic updates. 
