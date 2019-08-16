@@ -55,7 +55,8 @@ def _store_temp():
             ignore=shutil.ignore_patterns(
                     'config.png', 'fail.png',
                     'logo.png', 'pending.png',
-                    'success.png'
+                    'success.png', 'idle.png',
+                    'active.png'
             )
     )
 
