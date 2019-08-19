@@ -58,8 +58,14 @@ disable_splash=1
 #### 4. Change splash screen
 Place the splash screen image in **/usr/share/plymouth/themes/pix/splash.png**
 
+#### 5. Install clever_card_kit
+```sh
+wget http://monkmakes.com/downloads/mmcck.sh
+chmod +x mmcck.sh
+./mmcck.sh
+```
 
-#### 5. Connect the RFID reader
+#### 6. Connect the RFID reader
 *Skip this step if not useing the RFID reader*
 
 Go to **Preferences -> Raspberry pi Configuration**
@@ -81,7 +87,7 @@ Connect the GPIO pins:
 |Gray|RST|25|
 |Red|3.3V|3.3V|
 
-#### 6. Connect the Squid LED
+#### 7. Connect the Squid LED
 
 *Skip this step if not using the Squid LED*
 
@@ -92,7 +98,7 @@ Connect the GPIO pins:
 |Green|17|
 |Blue|27|
 
-#### 7. Install the [RASPIAUDIO sound card](https://www.raspiaudio.com/raspiaudio-aiy)
+#### 8. Install the [RASPIAUDIO sound card](https://www.raspiaudio.com/raspiaudio-aiy)
 
 *Skip this step if not using the sound card*
 
